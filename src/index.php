@@ -64,7 +64,7 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
   <main id="main">
     
     <div id="viz_container">
-      <canvas id="canvas" style="height: 100%; width: 100%"></canvas>
+      <canvas id="canvas" style="height: 100vh; width: calc(100vw - 350px)"></canvas>
       <section style="width:350px; max-height:100%; position:absolute; top:0;right:0;">
         <div class="card" id="sidebar" style="height:100vh;">
           <div class="card-header">

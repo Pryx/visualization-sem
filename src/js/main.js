@@ -1,5 +1,5 @@
 import { Circle, Path } from './primitives';
-import { Node, Edge, Particle, Spring, Point, repoulsive_force, attractive_force } from './graph'
+import { Node, Edge, Point, repulsive_force, attractive_force } from './graph'
 import * as $ from 'jquery'
 
 (function(){
@@ -8,22 +8,12 @@ import * as $ from 'jquery'
 	var data
 	var vertices = null
 	var edges = null
-	let eta = 0.99; // damping
-	let delta_t = 0.1; //time
+
 
 	btn.addEventListener('click', (event) => {
 		const file = document.getElementById('file-selector').files;
 		console.log(file[0]);
 		readFile(file[0]);
-
-
-
-		
-
-		
-
-
-
 	});
 
 
@@ -82,7 +72,7 @@ import * as $ from 'jquery'
 			)
 		}
 
-
+		redraw();
 	}
 
 	
@@ -109,10 +99,7 @@ import * as $ from 'jquery'
 		console.log(i)
 
 		ctx.scale(zoom, zoom);
-		redraw(ctx);
-
-
-
+		redraw();
 
 	}
 
@@ -175,56 +162,100 @@ import * as $ from 'jquery'
 	var up = true;
 	var i = 1;
 
+	let eta = 0.9; // damping
+	let delta_t = 0.1; //time
+	let max_v = 50; //time
+	let repulsion = 500;
+
+
+	let offset_w = canvasW * scale / 2;
+	let offset_h = canvasH * scale / 2;
+
 
 
 	var stop = false;
 
-
-
-
-
 	async function redraw(){
-		ctx.clearRect(0, 0, 100*scale*canvas.width, 100*scale*canvas.height);
-		if(edges != null){
 
-			edges.forEach(e => {
-				let dist = e.from.p.distance_sqr(e.to.p);
-				let rep = repoulsive_force(e.from, e.to);
-				rep = rep.multiply(eta);
-				rep = rep.multiply(delta_t);
-				e.from.p = e.from.p.add(rep);
-
-				let attr = attractive_force(e.from, e.to, dist);
-
-				attr = rep.multiply(eta);
-				attr = rep.multiply(delta_t);
-				e.from.p = e.from.p.subtract(attr);
-
-				//console.log(dist, rep, attr);
-
-				let edge = new Path(
-					ctx, 
-					e.from.p.x+(e.from.degree*25/2), 
-					e.from.p.y+(e.from.degree*25/2), 
-					e.to.p.x+(e.to.degree*25/2), 
-					e.to.p.y+(e.to.degree*25/2), 
-					{
-						fill: 'red', 
-						stroke: {color: 'red', width:5}
-					}
-				);
-
-				edge.draw();
-			});
-
-			vertices.forEach(v => {
-				let vertex = new Circle(ctx, v.p.x, v.p.y, v.degree*25, {fill: 'blue', stroke: {color: 'blue', width:5}})
-				vertex.draw();
-			});
-			await new Promise(r => setTimeout(r, 5));
-			redraw()
+		if (vertices == null || edges == null){
+			return
 		}
-	}
+		//console.log("Redrawing")
+		ctx.clearRect(0, 0, 9999999*canvas.width, 9999999*canvas.height);
 
-	redraw();
+		//
+		vertices.forEach(v => {
+			vertices.forEach(v2 => {
+				if (v.id !== v2.id)
+				{
+					var d = v.p.subtract(v2.p);
+					var distance = d.magnitude() + 0.1;//Divide by zero fix
+					var direction = d.normalize();
+
+					v.applyForce(direction.multiply(repulsion).divide(distance * distance * 0.5));
+					v2.applyForce(direction.multiply(repulsion).divide(distance * distance * -0.5));
+				}
+			});
+		});
+
+		edges.forEach(spring => {
+			var d = spring.to.p.subtract(spring.from.p); // the direction of the spring
+			var displacement = (spring.from.degree*25 + spring.to.degree*25)*10 - d.magnitude(); // 1 = spring length
+			var direction = d.normalize();
+
+			// apply force to each end point
+			spring.from.applyForce(direction.multiply(spring.k * displacement * -0.5));
+			spring.to.applyForce(direction.multiply(spring.k * displacement * 0.5));
+		});
+
+		vertices.forEach(v => {
+			var direction = v.p.multiply(-1.0);
+			v.applyForce(direction.multiply(repulsion / 50.0));
+		});
+
+		vertices.forEach(v =>  {
+			v.v = v.v.add(v.a.multiply(delta_t)).multiply(eta);
+			if (v.v.magnitude() > max_v) {
+				//console.log("MAX VELOCITY!")
+				v.v = v.v.normalize().multiply(max_v);
+			}
+			//console.log("VA? VV?",v.a, v.v)
+
+			//console.log("VPB?",v.p)
+			v.p = v.p.add(v.v);
+
+			//console.log("VPA?",v.p)
+
+			v.a = new Point(0,0);
+		});
+
+		edges.forEach(e => {
+			//console.log(dist, rep, attr);
+			let pos_f = e.from.p.add(new Point(offset_w, offset_h))
+			let pos_t = e.to.p.add(new Point(offset_w, offset_h))
+			let edge = new Path(
+				ctx, 
+				pos_f.x+(e.from.degree*25/2), 
+				pos_f.y+(e.from.degree*25/2), 
+				pos_t.x+(e.to.degree*25/2), 
+				pos_t.y+(e.to.degree*25/2), 
+				{
+					fill: 'red', 
+					stroke: {color: 'red', width:5}
+				}
+			);
+
+			edge.draw();
+		});
+
+		vertices.forEach(v => {
+			//console.log("Drawing vertex")
+			let pos = v.p.add(new Point(offset_w, offset_h))
+			let vertex = new Circle(ctx, pos.x, pos.y, v.degree*25, {fill: 'blue', stroke: {color: 'blue', width:5}})
+			vertex.draw();
+		});
+
+		await new Promise(r => setTimeout(r, 50));
+		redraw()
+	}
 })();
