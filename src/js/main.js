@@ -52,29 +52,33 @@ import * as $ from 'jquery'
 	function compute_coordinates(data){
 		vertices = []
 		for(let i=0; i < data.vertices.length; i++){
-			vertices.push(
+			vertices[data.vertices[i].id] =
 				new Node(
 					i,
-					2,
+					1,
 					data.vertices[i].title,
 					data.vertices[i].archetype,
-					canvas.width/2 + i*63,
-					canvas.height/2 + i*20*Math.random(28)
+					canvas.width/2,
+					canvas.height/2
 				)
-			)
+			
 		}
 
 		edges = []
 		for(let i=0; i < data.edges.length; i++){
+			let info = ""
+			if(data.edges[i].attributes) info = data.edges[i].attributes[32]
 			edges.push(
 				new Edge(
 					i,
 					vertices[data.edges[i].from],
 					vertices[data.edges[i].to],
 					data.edges[i].text,
-					data.edges[i].attributes[32]
+					info
 				)
 			)
+			vertices[data.edges[i].from].degree++;
+			vertices[data.edges[i].to].degree++;
 		}
 
 		redraw();
