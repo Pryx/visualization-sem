@@ -46,6 +46,9 @@ define('SEM_VIZ_VER', '1.0.0');
 
   <main id="main">
     <header><h1>Test</h1> <input type="file" id="file-selector" accept=".json"><button type="button" id="read">Load file</button></header>
+    <div id="viz_container">
+      <canvas id="canvas" style="height: 100%; width: 100%"></canvas>
+    </div>
   </main>
 
   <!-- END OF APP; SCRIPT LOADING-->
