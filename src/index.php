@@ -17,6 +17,20 @@ define('SEM_VIZ_VER', '1.0.0');
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/all.css">
+
+<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<style type="text/css">
+  #sidebar{
+    border-radius:0;
+    -webkit-box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
+box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
+  }
+</style>
+
 </head>
 
 <body>
@@ -44,14 +58,60 @@ define('SEM_VIZ_VER', '1.0.0');
     </section>
   </noscript>
 
+
+<!--PAGE START-->
+
   <main id="main">
-    <header><h1>Test</h1> <input type="file" id="file-selector" accept=".json"><button type="button" id="read">Load file</button></header>
+    
     <div id="viz_container">
       <canvas id="canvas" style="height: 100%; width: 100%"></canvas>
+      <section style="width:350px; max-height:100%; position:absolute; top:0;right:0;">
+        <div class="card" id="sidebar" style="height:100vh;">
+          <div class="card-header">
+            1. Select file
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <div class="custom-file">
+                <input type="file" id="file-selector" accept=".json" class="custom-file-input">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+              </div>
+            </div>
+            
+            <button type="button" id="read" class="btn btn-primary btn-block">Load file</button>
+
+            <h5>Info about file</h5>
+            Nodes: <span id="nodes-count" class="text-right">X</span>
+            <br>
+            Edges: <span id="edges-count" class="text-right">X</span>
+          </div>
+
+          <div class="card-header">
+            2. Choose Filter
+          </div>
+          <div class="card-body">
+            <input type="checkbox">Draw everything
+          </div>
+
+        </div>
+      </section>
+
+      <div style="width:30px;  position:absolute; top:10px;right:370px;">
+        <button class="btn btn-outline-primary" style="margin-bottom: 5px;"><i class="fas fa-plus"></i></button>
+        <br>
+        <button class="btn btn-outline-primary"><i class="fas fa-minus"></i></button>
+      </div>
+
     </div>
   </main>
 
   <!-- END OF APP; SCRIPT LOADING-->
+<!-- JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+
   <script src="js/viz-sem.min.js?ver=<?php echo SEM_VIZ_VER; ?>"></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:400,700&amp;subset=latin-ext" rel="stylesheet">
 </body>
