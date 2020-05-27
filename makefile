@@ -62,7 +62,7 @@ deploy-ci:
 	@ echo "Removing unwanted files"
 	@ $(clean)
 	@ $(write_version)
-	@ sed -i 's|###replace###|'"${PLACES_AR_CREDENTIALS}"'|' ci.deploy
+	@ sed -i 's|###replace###|'"${VIZ_SEM_CREDENTIALS}"'|' ci.deploy
 	@ php -f ./build_tools/deployment.phar ci.deploy
 	@ rm -rf $(BUILD_FOLDER)
 	@ echo " -- Deploy complete -- "
