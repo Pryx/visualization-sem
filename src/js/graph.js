@@ -108,6 +108,6 @@ export function attractive_force(node1, node2, d_orig){
 	}
 
 	let dl = distance_sqr - distance_orig
-	let cons = 999 * dl / distance_sqr
+	let cons = 10 * dl / distance_sqr
 	return new Point(cons * Math.sqrt(distance.x), cons * Math.sqrt(distance.y))
 }
