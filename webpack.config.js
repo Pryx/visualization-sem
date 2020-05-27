@@ -1,5 +1,5 @@
 const path = require('path');
-const UglifyJS = require('uglifyjs-webpack-plugin');
+const UglifyJS = require('terser-webpack-plugin');
 
 module.exports = (env) => {
   const isProd = env && env.prod;
@@ -10,7 +10,7 @@ module.exports = (env) => {
   if (isProd) {
     plugins.push(new UglifyJS({
       uglifyOptions: {
-        ecma: 6,
+        ecma: 7,
         compress: {
           warnings: false,
           conditionals: true,
@@ -23,7 +23,7 @@ module.exports = (env) => {
           join_vars: true
         },
         output: {
-          ecma: 6,
+          ecma: 7,
           comments: false,
           beautify: false
         }
@@ -38,7 +38,7 @@ module.exports = (env) => {
     devtool: 'source-map',
     output: {
       path: path.resolve(__dirname, 'src', 'js'),
-      filename: 'places-ar.min.js'
+      filename: 'viz-sem.min.js'
     },
     plugins: plugins,
     module:{

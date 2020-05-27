@@ -8,7 +8,7 @@ remote = ###replace###
 passivemode = yes
 
 ; local path (optional)
-local = places-ar/
+local = viz-sem/
 
 ; run in test-mode? (can be enabled by option -t or --test too)
 test = no

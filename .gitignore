@@ -1,0 +1,3 @@
+plugin.deploy
+node_modules/
+*.min.*
