@@ -8,7 +8,7 @@ define('SEM_VIZ_VER', '1.0.0');
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Places AR Demo</title>
+  <title>Visualization semestral work</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -45,10 +45,11 @@ define('SEM_VIZ_VER', '1.0.0');
   </noscript>
 
   <main id="main">
-
+    <header><h1>Test</h1> <input type="file" id="file-selector" accept=".json"><button type="button" id="read">Load file</button></header>
   </main>
+
   <!-- END OF APP; SCRIPT LOADING-->
-  <script src="js/sem-viz.min.js?ver=<?php echo PLACES_AR_VER; ?>"></script>
+  <script src="js/viz-sem.min.js?ver=<?php echo SEM_VIZ_VER; ?>"></script>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:400,700&amp;subset=latin-ext" rel="stylesheet">
 </body>
 
