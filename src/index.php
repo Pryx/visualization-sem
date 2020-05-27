@@ -1,0 +1,55 @@
+<?php
+/*This constant is replaced by build system*/
+define('SEM_VIZ_VER', '1.0.0');
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Places AR Demo</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <!--
+    Nobody should be using IE on mobile... :)
+  -->
+  <!--[if IE]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <noscript>
+    <!--
+      We do not work without JS, so warn anyone with it disabled
+    -->
+    <section id="nojs" class="wizard">
+      <div class="wizard-wrapper">
+        <div class="slide slide-nr0">
+          <div class="padded-wrap">
+            <h2>Javascript disabled!</h2>
+            <p>This app needs javascript to work properly. Please enable it and try again.</p>
+            <a class="btn btn-next error" href="./">Reload</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </noscript>
+
+  <main id="main">
+
+  </main>
+  <!-- END OF APP; SCRIPT LOADING-->
+  <script src="js/sem-viz.min.js?ver=<?php echo PLACES_AR_VER; ?>"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:400,700&amp;subset=latin-ext" rel="stylesheet">
+</body>
+
+</html>

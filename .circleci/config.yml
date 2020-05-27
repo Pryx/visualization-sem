@@ -1,0 +1,70 @@
+version: 2
+jobs:
+  lint:
+    docker:
+      - image: pryx/goldenegg:latest
+
+    working_directory: ~/places-ar
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}  
+           
+      - run: 
+          name: Install depedencies
+          command: make setup
+
+      - run: 
+          name: Lint
+          command: make lint
+          
+      - run: 
+          name: Run tests
+          command: make test
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+  deploy:
+    docker:
+      - image: pryx/goldenegg:latest
+
+    working_directory: ~/places-ar
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}  
+           
+      - run: 
+          name: Install depedencies
+          command: make setup
+
+      - run: 
+          name: Deploy
+          command: make deploy-ci VIZ_SEM_CREDENTIALS="$VIZ_SEM_CREDENTIALS"
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - lint
+
+      - deploy:
+          requires:
+                - lint
+          filters: 
+            branches:
+              only:
+                - master
