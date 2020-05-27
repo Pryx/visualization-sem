@@ -29,6 +29,12 @@ define('SEM_VIZ_VER', '1.0.0');
 -moz-box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
 box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
   }
+
+
+.card-body{
+    border-bottom: 1px solid rgba(0,0,0,.125);
+
+}
 </style>
 
 </head>
@@ -79,7 +85,8 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
             </div>
             
             <button type="button" id="read" class="btn btn-primary btn-block">Load file</button>
-
+          </div>
+          <div class="card-body">
             <h5>Info about file</h5>
             Nodes: <span id="nodes-count" class="text-right">X</span>
             <br>

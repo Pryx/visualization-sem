@@ -37,6 +37,11 @@ import * as $ from 'jquery'
 		reader.addEventListener('load', (e) => {
 			result = JSON.parse(e.target.result);
 			console.log(result);
+
+			$("#nodes-count").text(result.vertices.length);
+			$("#edges-count").text(result.edges.length);
+
+
 			compute_coordinates(result);
 		});
 		reader.readAsText(file);
@@ -64,8 +69,8 @@ import * as $ from 'jquery'
 			edges.push(
 				new Edge(
 					i,
-					data.edges[i].from,
-					data.edges[i].to,
+					vertices[data.edges[i].from],
+					vertices[data.edges[i].to],
 					data.edges[i].text,
 					data.edges[i].attributes[32]
 				)
