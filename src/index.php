@@ -97,9 +97,9 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
       </section>
 
       <div style="width:30px;  position:absolute; top:10px;right:370px;">
-        <button class="btn btn-outline-primary" style="margin-bottom: 5px;"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-outline-primary" style="margin-bottom: 5px;" id="zoom-up"><i class="fas fa-plus"></i></button>
         <br>
-        <button class="btn btn-outline-primary"><i class="fas fa-minus"></i></button>
+        <button class="btn btn-outline-primary" id="zoom-down"><i class="fas fa-minus"></i></button>
       </div>
 
     </div>

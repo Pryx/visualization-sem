@@ -36,22 +36,20 @@ import * as $ from 'jquery'
 		return result;
 	}
 
-	var canvas = document.getElementById('canvas'); 
-	var ctx = canvas.getContext('2d'); 
-	const canvasW = canvas.getBoundingClientRect().width;
-	const canvasH = canvas.getBoundingClientRect().height;
 
-	var scale = 2;
-	canvas.width = canvasW * scale;
-	canvas.height = canvasH * scale;
-	var zoom = 1;
-	var up = true;
-	var i = 0;
-	/*setInterval(function(){
+
+	
+	function change_zoom(up){
+
 		if (i == 4){
 			up = false;
+			$("#zoom-up").attr("disabled", true);
 		}else if (i == 0){
 			up = true
+			$("#zoom-down").attr("disabled", true);
+		} else {
+			$("#zoom-up").attr("disabled", false);
+			$("#zoom-down").attr("disabled", false);
 		}
 
 		if (up){
@@ -67,7 +65,40 @@ import * as $ from 'jquery'
 
 		ctx.scale(zoom, zoom);
 		redraw(ctx);
-	}, 1000);*/
+
+
+
+
+	}
+
+
+
+	$("body").on("click","#zoom-up",  function(){
+		change_zoom(true);
+		
+
+	});
+
+	$("body").on("click","#zoom-down",  function(){
+		change_zoom(false);
+		
+	});
+
+
+
+	var canvas = document.getElementById('canvas'); 
+	var ctx = canvas.getContext('2d'); 
+	const canvasW = canvas.getBoundingClientRect().width;
+	const canvasH = canvas.getBoundingClientRect().height;
+
+	var scale = 2;
+	canvas.width = canvasW * scale;
+	canvas.height = canvasH * scale;
+	var zoom = 1;
+	var up = true;
+	var i = 0;
+
+
 
 	var stop = false;
 
