@@ -1,4 +1,6 @@
 import { Circle, Path } from './primitives';
+import { Node, Edge, Particle, Spring, Point, repoulsive_force, attractive_force } from './graph'
+import * as $ from 'jquery'
 
 (function(){
 	const btn = document.getElementById('read');
@@ -45,10 +47,10 @@ import { Circle, Path } from './primitives';
 	var zoom = 1;
 	var up = true;
 	var i = 0;
-	setInterval(function(){
+	/*setInterval(function(){
 		if (i == 4){
 			up = false;
-		}else if (i == 1){
+		}else if (i == 0){
 			up = true
 		}
 
@@ -57,7 +59,7 @@ import { Circle, Path } from './primitives';
 			i++
 		}
 		else{
-			zoom = 0.75
+			zoom = 0.8
 			i--
 		}
 
@@ -65,30 +67,52 @@ import { Circle, Path } from './primitives';
 
 		ctx.scale(zoom, zoom);
 		redraw(ctx);
-	}, 1000);
+	}, 1000);*/
 
 	var stop = false;
 
+
 	var vertices = [
-		new Circle(ctx, 50,50,40, {fill: 'red', stroke: {color: 'red', width:5}}), 
-		new Circle(ctx, 200,200,40, {fill: 'red', stroke: {color: 'red', width:5}}),
-		new Circle(ctx, 500,200,40, {fill: 'blue', stroke: {color: 'blue', width:5}}),
-		new Circle(ctx, 200,500,40, {fill: 'blue', stroke: {color: 'blue', width:5}})
+		new Node(1, 2, "Cool", "person", canvas.width/2, canvas.height/2),
+		new Node(2, 1, "Less cool", "person", canvas.width/2, canvas.height/2),
+		new Node(3, 1, "Somewhat cool", "person", canvas.width/2, canvas.height/2),
+		new Node(4, 0, "Outsider", "person", canvas.width/2, canvas.height/2),
 	]
 
 	var edges = [
-		new Path(ctx, 70,70, 220,220, {fill: 'blue', stroke: {color: 'blue', width:5}}),
-		new Path(ctx, 220,220, 520,220, {fill: 'green', stroke: {color: 'green', width:5}}),
-		new Path(ctx, 520,220, 220,520, {fill: 'orange', stroke: {color: 'orange', width:5}})
+		new Edge(1, vertices[1], vertices[0], "Text", "knows"),
+		new Edge(2, vertices[2], vertices[0], "Edge 2", "knows"),
 	]
 
-	async function redraw(ctx){
+	async function redraw(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		edges.forEach(e => e.draw());
 
-		vertices.forEach(e => e.draw());
+		vertices.forEach(v => { vertices.forEach(v2 => { 
+				let dist = v.p.distance_sqr(v2.p);
+				let rep = repoulsive_force(v, v2);
+
+				v.p = v.p.add(rep);
+
+				let attr = attractive_force(v, v2, dist);
+
+				v.p = v.p.subtract(attr);
+
+				console.log(dist, rep, attr);
+			}); 
+		});
+
+		edges.forEach(e => {
+			let edge = new Path(ctx, e.from.p.x, e.from.p.y, e.to.p.x, e.to.p.y, {fill: 'red', stroke: {color: 'red', width:5}})
+			edge.draw();
+		});
+
+		vertices.forEach(v => {
+			let vertex = new Circle(ctx, v.p.x, v.p.y, v.degree*25, {fill: 'blue', stroke: {color: 'blue', width:5}})
+			vertex.draw();
+		});
 		await new Promise(r => setTimeout(r, 2000));
+		redraw()
 	}
 
-	redraw(ctx);
+	redraw();
 })();
