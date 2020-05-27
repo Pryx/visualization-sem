@@ -84,31 +84,28 @@ import * as $ from 'jquery'
 		new Edge(2, vertices[2], vertices[0], "Edge 2", "knows"),
 	]
 
-	let eta = 0.5; // damping
-	let delta_t = 0.01; //time
+	let eta = 0.99; // damping
+	let delta_t = 0.1; //time
 
 
 	async function redraw(){
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		vertices.forEach(v => { vertices.forEach(v2 => { 
-				let dist = v.p.distance_sqr(v2.p);
-				let rep = repoulsive_force(v, v2);
-				rep = rep.multiply(eta);
-				rep = rep.multiply(delta_t);
-				v.p = v.p.add(rep);
-
-				let attr = attractive_force(v, v2, dist);
-
-				attr = rep.multiply(eta);
-				attr = rep.multiply(delta_t);
-				v.p = v.p.subtract(attr);
-
-				console.log(dist, rep, attr);
-			}); 
-		});
-
 		edges.forEach(e => {
+			let dist = e.from.p.distance_sqr(e.to.p);
+			let rep = repoulsive_force(e.from, e.to);
+			rep = rep.multiply(eta);
+			rep = rep.multiply(delta_t);
+			e.from.p = e.from.p.add(rep);
+
+			let attr = attractive_force(e.from, e.to, dist);
+
+			attr = rep.multiply(eta);
+			attr = rep.multiply(delta_t);
+			e.from.p = e.from.p.subtract(attr);
+
+			//console.log(dist, rep, attr);
+
 			let edge = new Path(
 				ctx, 
 				e.from.p.x+(e.from.degree*25/2), 
@@ -128,7 +125,7 @@ import * as $ from 'jquery'
 			let vertex = new Circle(ctx, v.p.x, v.p.y, v.degree*25, {fill: 'blue', stroke: {color: 'blue', width:5}})
 			vertex.draw();
 		});
-		await new Promise(r => setTimeout(r, 10));
+		await new Promise(r => setTimeout(r, 5));
 		redraw()
 	}
 

@@ -88,7 +88,7 @@ export function repoulsive_force(node1, node2){
 
 		let cons = 0
 		if (ds_pow_3 != 0.0)
-			cons = node1.degree / (distance_sqr * ds)
+			cons = node1.degree*5 / (distance_sqr * ds)
 		return new Point(-cons * Math.sqrt(distance.x), -cons * Math.sqrt(distance.y))
 	} 
 
@@ -108,6 +108,6 @@ export function attractive_force(node1, node2, d_orig){
 	}
 
 	let dl = distance_sqr - distance_orig
-	let cons = 10 * dl / distance_sqr
+	let cons = 1 * dl / distance_sqr
 	return new Point(cons * Math.sqrt(distance.x), cons * Math.sqrt(distance.y))
 }
