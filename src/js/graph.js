@@ -52,6 +52,13 @@ Point.prototype = {
 	},
 	distance_sqr: function(point2){
 		return new Point(Math.pow(this.x - point2.x,2), Math.pow(this.y - point2.y,2))
+	},
+	rotate: function(rad)
+	{
+		return new Point(
+			this.x * Math.cos(rad) - this.y * Math.sin(rad),
+			this.x * Math.sin(rad) + this.y * Math.cos(rad)
+		);
 	}
 }
 

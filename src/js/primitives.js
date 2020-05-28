@@ -1,6 +1,6 @@
-export function Circle(context, x,y,d,style, text){
-  this.x = x
-  this.y = y
+export function Circle(context, center, d, style, text){
+  this.x = center.x
+  this.y = center.y
   this.d = d
   this.style = style || {}
   this.text = text || undefined
@@ -63,11 +63,12 @@ Circle.prototype = {
 }
 
 
-export function Path (context, x1, y1, x2, y2, style, text){
-  this.points = [ {x:x1,y:y1}, {x:x2,y:y2} ]
+export function Path (context, p1, p2, offset, style, text){
+  this.points = [ p1, p2 ]
   this.style = style || {}
   this.context = context;
   this.text = text || undefined
+  this.offset = offset
 }
 
 Path.prototype = {
@@ -96,12 +97,19 @@ Path.prototype = {
       console.error("No stroke style for path")
     }
 
+
+    let direction = this.points[0].subtract(this.points[1]).normalize();
+    let direction_offset = direction.multiply(this.offset);
+    let direction_rot1 = direction.rotate(style.triangle.degree).multiply(style.triangle.size).add(direction_offset);
+    let direction_rot2 = direction.rotate(-style.triangle.degree).multiply(style.triangle.size).add(direction_offset);
+
     context.beginPath();
     context.fillStyle = style.fill
-    context.moveTo(this.points[1].x+100, this.points[1].y+100);
-    context.lineTo(this.points[1].x+150, this.points[1].y+150);
-    context.lineTo(this.points[1].x-150, this.points[1].y-150);
+    context.moveTo(this.points[1].x+direction_offset.x, this.points[1].y+direction_offset.y);
+    context.lineTo(this.points[1].x+direction_rot1.x, this.points[1].y+direction_rot1.y);
+    context.lineTo(this.points[1].x+direction_rot2.x, this.points[1].y+direction_rot2.y);
     context.fill();
+    context.closePath()
 
     if (this.text!==undefined && this.style.font.size!==undefined  
           && this.style.font.family!==undefined )

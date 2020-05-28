@@ -430,10 +430,15 @@ import * as $ from 'jquery'
 			let pos_t = e.to.p;
 			let edge = new Path(
 				ctx, 
-				zoom_scale.x(pos_f.x)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2), 
-				zoom_scale.y(pos_f.y)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2), 
-				zoom_scale.x(pos_t.x)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
-				zoom_scale.y(pos_t.y)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
+				new Point(
+					zoom_scale.x(pos_f.x)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2), 
+					zoom_scale.y(pos_f.y)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2)
+				),
+				new Point(
+					zoom_scale.x(pos_t.x)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
+					zoom_scale.y(pos_t.y)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2)
+				), 
+				zoom_scale.length(Math.log2(e.to.degree+1)*25),
 				{
 					fill: colors[colors.length - e.type - 1], 
 					stroke: {
@@ -443,6 +448,10 @@ import * as $ from 'jquery'
 					font: {
 						family: "Roboto",
 						size: zoom_scale.length(14)
+					},
+					triangle: {
+						size: zoom_scale.length(30),
+						degree: Math.PI/12
 					}
 				},
 
@@ -459,8 +468,10 @@ import * as $ from 'jquery'
 			let pos = v.p;
 			let vertex = new Circle(
 				ctx,
-				zoom_scale.x(pos.x),
-				zoom_scale.y(pos.y),
+				new Point(
+					zoom_scale.x(pos.x),
+					zoom_scale.y(pos.y),
+				), 
 				zoom_scale.length(Math.log2(v.degree+1)*25),
 				{
 					fill: colors[v.type], 
