@@ -147,10 +147,6 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
             <div class="card-body">
               <div id="node-types">
               </div>
-
-              <div>
-                <input type="checkbox">Draw everything
-              </div>
               <div>
                 <input type="checkbox" id="node_labels"><label for="node_labels">Show node labels</label>
               </div>
