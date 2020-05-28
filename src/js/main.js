@@ -315,10 +315,23 @@ import * as $ from 'jquery'
 	});
 
 	$("body").on("mousedown","#canvas",  function(e){
-		//move
-		down = true;
-		defX = e.pageX
-		defY = e.pageY	
+		if (e.button === 0) {
+			vertices.forEach((v) =>{
+				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
+				let dx = v.p.x+r - zoom_scale.x(e.pageX*scale),
+					dy = v.p.y+r - zoom_scale.y(e.pageY*scale),
+					dist = Math.abs(dx + dy);
+
+				if (dist <= r) { 
+					console.log("Clicked vertex "+v.id)
+				}
+			});
+		}else{
+			//move
+			down = true;
+			defX = e.pageX
+			defY = e.pageY	
+		}
 	});
 
 
@@ -438,7 +451,7 @@ import * as $ from 'jquery'
 					zoom_scale.x(pos_t.x)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
 					zoom_scale.y(pos_t.y)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2)
 				), 
-				zoom_scale.length(Math.log2(e.to.degree+1)*25),
+				zoom_scale.length(Math.log2(e.to.degree+1)*25/2+10),
 				{
 					fill: colors[colors.length - e.type - 1], 
 					stroke: {
@@ -455,10 +468,7 @@ import * as $ from 'jquery'
 					}
 				},
 
-				edge_labels?"Edge label":undefined
-
-
-
+				edge_labels?e.text:undefined
 			);
 
 			edge.draw();
@@ -484,7 +494,7 @@ import * as $ from 'jquery'
 						size: zoom_scale.length(14)
 					}
 				},
-				node_labels?"Node label":undefined
+				node_labels?v.name:undefined
 			);
 			vertex.draw();
 		});
