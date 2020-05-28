@@ -161,6 +161,10 @@ import * as $ from 'jquery'
 	function compute_coordinates(data){
 		vertices = []
 		for(let i=0; i < data.vertices.length; i++){
+			let description = "";
+			data.vertices[i].attributes.forEach(atr => {
+				description += "<strong>"+atr[0]+":</strong> "+atr[1]+"<br>"
+			});
 			vertices[data.vertices[i].id] =
 				new Node(
 					i,
@@ -168,7 +172,8 @@ import * as $ from 'jquery'
 					data.vertices[i].title,
 					data.vertices[i].archetype,
 					offset_w*Math.random(),
-					offset_h*Math.random()
+					offset_h*Math.random(),
+					description
 				)
 			
 		}
@@ -327,8 +332,14 @@ import * as $ from 'jquery'
 		down = false;  
 	});
 
+	$("#canvas").on("contextmenu",function(e){
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		return false;
+	});
 	$("body").on("mousedown","#canvas",  function(e){
-		if (e.button === 0) {
+		e.preventDefault()
+		if (e.which === 1 || e.which === 3) {
 			vertices.forEach((v) =>{
 				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
 				let dx = v.p.x+r - zoom_scale.x(e.pageX*scale),
@@ -337,6 +348,11 @@ import * as $ from 'jquery'
 
 				if (dist <= r) { 
 					console.log("Clicked vertex "+v.id)
+					if (e.which === 1){
+						console.log("Left "+v.id)
+					} else{
+						$("#node-info").html(v.description)
+					}
 				}
 			});
 		}else{

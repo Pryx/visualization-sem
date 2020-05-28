@@ -97,11 +97,13 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
               
               <button type="button" id="read" class="btn btn-primary btn-block">Load file</button>
             </div>
+             <div class="card-header">
+              <i class="fas fa-info color-primary"></i> Graph info
+            </div>
             <div class="card-body">
-              <h5>Info about file</h5>
-              Nodes: <span id="nodes-count" class="text-right">X</span>
+              Nodes: <span id="nodes-count" class="text-right">0</span>
               <br>
-              Edges: <span id="edges-count" class="text-right">X</span>
+              Edges: <span id="edges-count" class="text-right">0</span>
             </div>
 
             <div class="card-header">
@@ -111,14 +113,22 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
 
             <div class="card-body">
               <div class="input-group">
-              <input type="text" class="form-control" placeholder="Node">
+                <input type="text" class="form-control" placeholder="Node">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" type="button" id="button-search">Search</button>
                 </div>
               </div>
+            </div>
+
+            <div class="card-header">
+              <i class="fas fa-info color-primary"></i> Node info
+            </div>
 
 
-              </div>
+            <div class="card-body">
+              <p id="node-info">Right click a node to see additional info here</p>
+            </div>
+
             <div class="card-header">
               <i class="fas fa-type color-primary"></i> Node types
             </div>

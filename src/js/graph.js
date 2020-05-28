@@ -1,4 +1,4 @@
-export function Node(id, degree, name, type,x,y, stat){
+export function Node(id, degree, name, type,x,y, description){
 	this.id = id;
 	this.name = name;
 	this.type = type;
@@ -6,7 +6,7 @@ export function Node(id, degree, name, type,x,y, stat){
 	this.p = new Point(x, y);
 	this.v = new Point(0, 0); // velocity
 	this.a = new Point(0, 0); // force
-	this.static = stat || false;
+	this.description = description || "No description"
 }
 
 export function Edge(id, from, to, text, type){
