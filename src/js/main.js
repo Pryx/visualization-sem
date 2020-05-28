@@ -162,9 +162,14 @@ import * as $ from 'jquery'
 		vertices = []
 		for(let i=0; i < data.vertices.length; i++){
 			let description = "<strong>Node ID:</strong> "+i+"<br>";
-			data.vertices[i].attributes.forEach(atr => {
-				description += "<strong>"+atr[0]+":</strong> "+atr[1]+"<br>"
-			});
+			if (data.vertices[i].attributes.length)
+			{
+				data.vertices[i].attributes.forEach(atr => {
+					description += "<strong>"+atr[0]+":</strong> "+atr[1]+"<br>"
+				});
+			}else{
+				description+= "No additional info"
+			}
 			vertices[data.vertices[i].id] =
 				new Node(
 					i,
