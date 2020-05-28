@@ -426,6 +426,13 @@ import * as $ from 'jquery'
 	}
 
 
+	$("body").on("change", ".refilter-degree", function(){
+
+		compute_coordinates(data)
+
+	});
+
+
 	$("body").on("change", ".refilter", function(){
 
 		vertices.forEach(v => {
@@ -437,11 +444,7 @@ import * as $ from 'jquery'
 
 		});
 
-		$("body").on("change", ".refilter-degree", function(){
 
-			compute_coordinates(data)
-
-		});
 
 
 		for(let i=0; i < data.edges.length; i++){
