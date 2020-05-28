@@ -115,7 +115,7 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
 
               <div class="form-group">
                 <label for="mindigree">Minimal node degree:</label> <span id="node_degree_sel"></span>
-                <input type="range" class="form-control-range refilter" id="mindegree">
+                <input type="range" class="form-control-range refilter-degree" id="mindegree">
               </div>
 
 
