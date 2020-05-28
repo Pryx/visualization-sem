@@ -282,12 +282,15 @@ import * as $ from 'jquery'
 
 	canvas.addEventListener("wheel", zoomUsingCustomScale);
 
+	
+
 	function zoomUsingCustomScale(e) {
 		trackMouse(e);
 		trackWheel(e);
 		scaleShapes();
 		console.log("SCALING")
 	}
+
 
 	function trackMouse(e) {
 		mouse.screen.x	= e.clientX*scale - shift.x;
@@ -373,7 +376,7 @@ import * as $ from 'jquery'
 	});
 	$("body").on("mousedown","#canvas",  function(e){
 		e.preventDefault()
-		if (e.which === 1 || e.which === 3) {
+		if (e.which === 3) {
 			vertices.forEach((v) =>{
 				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
 				let dx = zoom_scale.x(v.p.x)+r - e.pageX*scale+shift.x,
@@ -385,7 +388,8 @@ import * as $ from 'jquery'
 					if (e.which === 1){
 						console.log("Left "+v.id)
 					} else{
-						$("#node-info").html(v.description)
+						if(v.show)
+							$("#node-info").html(v.description)
 					}
 				}
 			});
