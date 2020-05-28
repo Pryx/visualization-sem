@@ -90,6 +90,13 @@ import * as $ from 'jquery'
 			$("#nodes-count").text(result.vertices.length);
 			$("#edges-count").text(result.edges.length);
 
+			let i = 0;
+			result.vertexArchetypes.forEach(t => {
+				$("#node-types").append("<div><span class=\"circle-color\" style=\"background:" +
+				colors[i] + "\"></span> " + t.name + "</div>");
+				i++;
+			});
+
 
 			compute_coordinates(result);
 		});
@@ -179,6 +186,9 @@ import * as $ from 'jquery'
 		console.log(i)
 
 		ctx.scale(zoom, zoom);
+
+		
+		
 		redraw();
 
 	}
@@ -341,7 +351,7 @@ import * as $ from 'jquery'
 				pos.x,
 				pos.y,
 				Math.log2(v.degree)*25,
-				{fill: colors[v.archetype], stroke: {color: colors[v.archetype], width:5}}
+				{fill: colors[v.type], stroke: {color: colors[v.type], width:5}}
 				)
 			vertex.draw();
 		});

@@ -35,6 +35,16 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
     border-bottom: 1px solid rgba(0,0,0,.125);
 
 }
+
+.circle-color{
+
+      height: 15px;
+    width: 15px;
+    border-radius: 15px;
+    display: inline-block;
+  
+}
+
 </style>
 
 </head>
@@ -74,7 +84,7 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
       <section style="width:350px; max-height:100%; position:absolute; top:0;right:0;">
         <div class="card" id="sidebar" style="height:100vh;">
           <div class="card-header">
-            1. Select file
+            <i class="fas fa-file color-primary"></i> Select file
           </div>
           <div class="card-body">
             <div class="form-group row">
@@ -94,9 +104,16 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
           </div>
 
           <div class="card-header">
-            2. Choose Filter
+            <i class="fas fa-filter color-primary"></i> Choose Filter
           </div>
+
+
           <div class="card-body">
+
+            <div id="node-types">
+            </div>
+
+
             <input type="checkbox">Draw everything
           </div>
 
