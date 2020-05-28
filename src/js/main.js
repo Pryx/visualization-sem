@@ -228,7 +228,7 @@ import * as $ from 'jquery'
 						data.edges[i].id,
 						vertices[data.edges[i].from],
 						vertices[data.edges[i].to],
-						data.edges[i].text || "Edge "+i,
+						data.edges[i].text || "Edge "+data.edges[i].id,
 						atype
 					)
 
