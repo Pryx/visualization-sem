@@ -223,16 +223,16 @@ import * as $ from 'jquery'
 				(super_node!= null && (data.edges[i].from == super_node.id || data.edges[i].to == super_node.id))
 				)
 			{
-				edges.push(
+				edges[data.edges[i].id]=
 					new Edge(
-						i,
+						data.edges[i].id,
 						vertices[data.edges[i].from],
 						vertices[data.edges[i].to],
-						data.edges[i].text || data.edgeArchetypes[data.edges[i].subedgeInfo[0].archetype].text || "Edge "+i,
+						data.edges[i].text || "Edge "+i,
 						atype
 					)
 
-				)
+				
 			}
 			vertices[data.edges[i].from].degree++;
 			vertices[data.edges[i].to].degree++;
@@ -269,6 +269,41 @@ import * as $ from 'jquery'
 
 		});
 
+	}
+
+	function expand_node(node){
+		
+		data.edges.forEach(e=>{
+
+			let info = ""
+			if(e.attributes) info = e.attributes[32]
+
+			let atype = ""
+			if(e.archetype) atype = e.archetype
+			if(e.subedgeInfo) atype = e.subedgeInfo[0].archetype
+			
+
+			if(e.from == node.id) vertices[e.to].show = true;
+			if(e.to == node.id) vertices[e.from].show = true; //backwards edges
+
+		console.log("Expanding node");
+		if(e.from == node.id || e.to == node.id)
+				
+			{
+				edges[e.id] =
+					new Edge(
+						e.id,
+						vertices[e.from],
+						vertices[e.to],
+						data.edges[i].text || "Edge "+i,
+						atype
+					)
+
+				
+			}
+		}
+			
+		)
 	}
 
 
@@ -415,7 +450,7 @@ import * as $ from 'jquery'
 	});
 	$("body").on("mousedown","#canvas",  function(e){
 		e.preventDefault()
-		if (e.which === 3) {
+		if (e.which === 1 || e.which === 3) {
 			vertices.forEach((v) =>{
 				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
 				let dx = zoom_scale.x(v.p.x)+r - e.pageX*scale+shift.x,
@@ -424,12 +459,22 @@ import * as $ from 'jquery'
 
 				//console.log(v.p, e.pageX, e.pageY)
 				if (dist <= r) { 
-					console.log("Clicked vertex "+v.id)
-					if (e.which === 1){
-						console.log("Left "+v.id)
-					} else{
-						if(v.show)
-							$("#node-info").html(v.description)
+					if(e.which === 1){
+						down = true;
+						defX = e.pageX
+						defY = e.pageY
+						expand_node(v)
+					} else {
+
+
+
+						console.log("Clicked vertex "+v.id)
+						if (e.which === 1){
+							console.log("Left "+v.id)
+						} else{
+							if(v.show)
+								$("#node-info").html(v.description)
+						}
 					}
 				}
 			});
