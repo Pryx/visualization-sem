@@ -77,6 +77,7 @@ import * as $ from 'jquery'
 	var vertices = null
 	var edges = null
 	var super_node = null
+	var super_node_id = -1
 
 
 	btn.addEventListener('click', (event) => {
@@ -197,7 +198,7 @@ import * as $ from 'jquery'
 		*/
 
 		if(super_node != null){
-			super_node.show = true
+			vertices[super_node_id].show = true
 		}
 
 
@@ -256,6 +257,7 @@ import * as $ from 'jquery'
 		vertices.forEach(v => {
 			if(v.degree > super_node.degree){
 				super_node = v;
+				super_node_id = v.id;
 			} 
 
 
