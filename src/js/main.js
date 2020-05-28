@@ -174,7 +174,7 @@ import * as $ from 'jquery'
 				new Node(
 					i,
 					1,
-					data.vertices[i].title,
+					data.vertices[i].title || "Node "+i,
 					data.vertices[i].archetype,
 					offset_w*Math.random(),
 					offset_h*Math.random(),
@@ -197,7 +197,7 @@ import * as $ from 'jquery'
 					i,
 					vertices[data.edges[i].from],
 					vertices[data.edges[i].to],
-					data.edges[i].text,
+					data.edges[i].text|| "Edge "+i,
 					atype
 				)
 			)
@@ -347,8 +347,8 @@ import * as $ from 'jquery'
 		if (e.which === 1 || e.which === 3) {
 			vertices.forEach((v) =>{
 				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
-				let dx = v.p.x+r - zoom_scale.x(e.pageX*scale),
-					dy = v.p.y+r - zoom_scale.y(e.pageY*scale),
+				let dx = zoom_scale.x(v.p.x)+r - e.pageX*scale+shift.x,
+					dy = zoom_scale.y(v.p.y)+r - e.pageY*scale+shift.y,
 					dist = Math.abs(dx + dy);
 
 				if (dist <= r) { 
