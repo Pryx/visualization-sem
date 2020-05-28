@@ -111,4 +111,4 @@ setup:
 
 lint-fix:
 	@ echo " == JS =="
-	@ ./node_modules/.bin/eslint src/js/ --fix --quiet
+	@ ./node_modules/.bin/eslint src/js/* --ignore-pattern *.min.* --fix --quiet

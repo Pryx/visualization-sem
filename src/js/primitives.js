@@ -45,13 +45,16 @@ Circle.prototype = {
       context.stroke()
     }
 
-    if (this.text!==undefined){
-      this.context.font = "14px Arial";
+    if (this.text!==undefined && this.style.font.size!==undefined  
+          && this.style.font.family!==undefined )
+    {
+
+      this.context.font = this.style.font.size + "px " + this.style.font.family;
       var width = context.measureText(this.text).width; /// width in pixels
       context.fillStyle = '#FFF';
-      context.fillRect(xc-2-width/2, yc-9, width+4, 18);
+      context.fillRect(xc-2-width/2, yc-(this.style.font.size/2+2), width+4, this.style.font.size+4);
       context.fillStyle = '#000';
-      this.context.fillText(this.text, xc-width/2, yc+7);     
+      this.context.fillText(this.text, xc-width/2, yc+this.style.font.size/2);     
     }
 
     context.restore()
@@ -76,6 +79,7 @@ Path.prototype = {
     context.moveTo(this.points[0].x+.5, this.points[0].y+.5);
     context.lineTo(this.points[1].x+.5, this.points[1].y+.5);
 
+
     let style = this.style
     context.closePath()
 
@@ -92,15 +96,26 @@ Path.prototype = {
       console.error("No stroke style for path")
     }
 
-    if (this.text!==undefined){
+    context.beginPath();
+    context.fillStyle = style.fill
+    context.moveTo(this.points[1].x+100, this.points[1].y+100);
+    context.lineTo(this.points[1].x+150, this.points[1].y+150);
+    context.lineTo(this.points[1].x-150, this.points[1].y-150);
+    context.fill();
+
+    if (this.text!==undefined && this.style.font.size!==undefined  
+          && this.style.font.family!==undefined )
+    {
       let xc = (this.points[0].x+.5+this.points[1].x+.5)/2;
       let yc = (this.points[0].y+.5 +this.points[1].y+.5)/2;
-      this.context.font = "14px Arial";
+
+
+      this.context.font = this.style.font.size + "px " + this.style.font.family;
       var width = context.measureText(this.text).width; /// width in pixels
       context.fillStyle = '#FFF';
-      context.fillRect(xc-2-width/2, yc-9, width+4, 18);
+      context.fillRect(xc-2-width/2, yc-(this.style.font.size/2+2), width+4, this.style.font.size+4);
       context.fillStyle = '#000';
-      this.context.fillText(this.text, xc-width/2, yc+7);     
+      this.context.fillText(this.text, xc-width/2, yc+this.style.font.size/2);     
     }
 
 		context.restore()

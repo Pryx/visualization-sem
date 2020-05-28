@@ -66,7 +66,6 @@ import * as $ from 'jquery'
 		"#800080",
 		"#ff0000",
 		"#c0c0c0",
-		"#ffff00"
 	];
 
 
@@ -132,7 +131,7 @@ import * as $ from 'jquery'
 	var scale = 2;
 	canvas.width = canvasW * scale;
 	canvas.height = canvasH * scale;
-	var zoom = 1;
+	//var zoom = 1;
 	var up = true;
 	var i = 1;
 
@@ -187,34 +186,110 @@ import * as $ from 'jquery'
 		redraw();
 	}
 
+
+	var zoom = {
+		scale : 1,
+		screen : {
+			x : 0,
+			y : 0,
+		},
+		world : {
+			x : 0,
+			y : 0,
+		},
+	};
+
+	var mouse = {
+		screen : {
+			x : 0,
+			y : 0,
+		},
+		world : {
+			x : 0,
+			y : 0,
+		},
+	};
+
+	var shift = {
+		x: 0,
+		y: 0
+	}
+
+	var zoom_scale = {
+		length : function(number) {
+			return Math.floor(number * zoom.scale);
+		},
+		x : function(number) {
+			return Math.floor((number - zoom.world.x) * zoom.scale + zoom.screen.x);
+		},
+		y : function(number) {
+			return Math.floor((number - zoom.world.y) * zoom.scale + zoom.screen.y);
+		},
+		x_INV : function(number) {
+			return Math.floor((number - zoom.screen.x) * (1 / zoom.scale) + zoom.world.x);
+		},
+		y_INV : function(number) {
+			return Math.floor((number - zoom.screen.y) * (1 / zoom.scale) + zoom.world.y);
+		},
+	};
+
+
+	canvas.addEventListener("wheel", zoomUsingCustomScale);
+
+	function zoomUsingCustomScale(e) {
+		trackMouse(e);
+		trackWheel(e);
+		scaleShapes();
+		console.log("SCALING")
+	}
+
+	function trackMouse(e) {
+		mouse.screen.x	= e.clientX*scale - shift.x;
+		mouse.screen.y	= e.clientY*scale - shift.y;
+		mouse.world.x	= zoom_scale.x_INV(mouse.screen.x);
+		mouse.world.y	= zoom_scale.y_INV(mouse.screen.y);
+	}
+
+	function trackWheel(e) {
+		if (e.deltaY < 0) {
+			zoom.scale = Math.min(5, zoom.scale * 1.1);
+		} else {
+			zoom.scale = Math.max(0.1, zoom.scale * (1/1.1));
+		}
+	}
+
+	function scaleShapes() {
+		zoom.screen.x	= mouse.screen.x;
+		zoom.screen.y	= mouse.screen.y;
+		zoom.world.x	= mouse.world.x;
+		zoom.world.y	= mouse.world.y;
+		mouse.world.x	= zoom_scale.x_INV(mouse.screen.x);
+		mouse.world.y	= zoom_scale.y_INV(mouse.screen.y);
+	}
 	
 	function change_zoom(up){
+		$("#zoom-up").attr("disabled", true);
+		$("#zoom-down").attr("disabled", true);
 
-		if (i == 10){
+		if (up && zoom.scale<5){
+			zoom.scale *= 1.1;
+		}
+		else if (zoom.scale>0.1){
+			zoom.scale *= 1/1.1
+		}
+
+
+
+		if (zoom.scale == 5){
 			$("#zoom-up").attr("disabled", true);
-		}else if (i == 0){
+			$("#zoom-down").attr("disabled", false);
+		}else if (zoom.scale == 0.1){
+			$("#zoom-up").attr("disabled", false);
 			$("#zoom-down").attr("disabled", true);
 		} else {
 			$("#zoom-up").attr("disabled", false);
 			$("#zoom-down").attr("disabled", false);
 		}
-
-		if (up){
-			zoom = 1.25;
-			i++
-		}
-		else{
-			zoom = 0.8
-			i--
-		}
-
-		console.log(i)
-
-		ctx.scale(zoom, zoom);
-
-		
-		
-		redraw();
 
 	}
 
@@ -241,26 +316,21 @@ import * as $ from 'jquery'
 
 	$("body").on("mousedown","#canvas",  function(e){
 		//move
-		
 		down = true;
 		defX = e.pageX
-		defY = e.pageY
-
-
-
-		
+		defY = e.pageY	
 	});
 
 
-		$("#canvas").mousemove(function(event){
-			if(down){
-				let k = 1
-				if(i != 1) k = Math.pow(.8,i-1)
-				ctx.translate(k*scale*(event.pageX - defX), k*scale*(event.pageY - defY))
-				defX = event.pageX
-				defY = event.pageY
-			}
-		});
+	$("#canvas").mousemove(function(event){
+		if(down){
+			shift.x += scale*(event.pageX - defX);
+			shift.y += scale*(event.pageY - defY)
+			ctx.translate(scale*(event.pageX - defX), scale*(event.pageY - defY))
+			defX = event.pageX
+			defY = event.pageY
+		}
+	});
 
 
 
@@ -360,14 +430,20 @@ import * as $ from 'jquery'
 			let pos_t = e.to.p;
 			let edge = new Path(
 				ctx, 
-				pos_f.x+(Math.log2(e.from.degree+1)*25/2), 
-				pos_f.y+(Math.log2(e.from.degree+1)*25/2), 
-				pos_t.x+(Math.log2(e.to.degree+1)*25/2), 
-				pos_t.y+(Math.log2(e.to.degree+1)*25/2), 
+				zoom_scale.x(pos_f.x)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2), 
+				zoom_scale.y(pos_f.y)+zoom_scale.length(Math.log2(e.from.degree+1)*25/2), 
+				zoom_scale.x(pos_t.x)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
+				zoom_scale.y(pos_t.y)+zoom_scale.length(Math.log2(e.to.degree+1)*25/2), 
 				{
-
 					fill: colors[colors.length - e.type - 1], 
-					stroke: {color: colors[colors.length - e.type - 1], width:3}
+					stroke: {
+						color: colors[colors.length - e.type - 1], 
+						width:3
+					},
+					font: {
+						family: "Roboto",
+						size: zoom_scale.length(14)
+					}
 				},
 
 				edge_labels?"Edge label":undefined
@@ -383,12 +459,19 @@ import * as $ from 'jquery'
 			let pos = v.p;
 			let vertex = new Circle(
 				ctx,
-				pos.x,
-				pos.y,
-				Math.log2(v.degree+1)*25,
+				zoom_scale.x(pos.x),
+				zoom_scale.y(pos.y),
+				zoom_scale.length(Math.log2(v.degree+1)*25),
 				{
 					fill: colors[v.type], 
-					stroke: {color: colors[v.type], width:5}
+					stroke: {
+						color: colors[v.type], 
+						width:5
+					},
+					font: {
+						family: "Roboto",
+						size: zoom_scale.length(14)
+					}
 				},
 				node_labels?"Node label":undefined
 			);
