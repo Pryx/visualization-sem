@@ -381,8 +381,9 @@ import * as $ from 'jquery'
 				let r = zoom_scale.length(Math.log2(v.degree+1)*25/2);
 				let dx = zoom_scale.x(v.p.x)+r - e.pageX*scale+shift.x,
 					dy = zoom_scale.y(v.p.y)+r - e.pageY*scale+shift.y,
-					dist = Math.abs(dx + dy);
+					dist = Math.sqrt(dx*dx + dy*dy);
 
+				//console.log(v.p, e.pageX, e.pageY)
 				if (dist <= r) { 
 					console.log("Clicked vertex "+v.id)
 					if (e.which === 1){
