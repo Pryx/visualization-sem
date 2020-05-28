@@ -126,9 +126,12 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
               <div id="node-types">
               </div>
 
-
-              <input type="checkbox">Draw everything
-              <input type="checkbox" id="node_labels">Show node labels
+              <div>
+                <input type="checkbox">Draw everything
+              </div>
+              <div>
+                <input type="checkbox" id="node_labels"><label for="node_labels">Show node labels</label>
+              </div>
             </div>
             <div class="card-header">
               <i class="fas fa-type color-primary"></i> Edge types
@@ -136,7 +139,9 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
             <div class="card-body">
               <div id="edge-types">
               </div>
-              <input type="checkbox" id="edge_labels">Show edge labels
+              <div>
+                <input type="checkbox" id="edge_labels"><label for="edge_labels">Show edge labels</label>
+              </div>
             </div>
           </div>
         </div>

@@ -112,16 +112,19 @@ import * as $ from 'jquery'
 			let i = 0;
 			$("#node-types > *").remove();
 			result.vertexArchetypes.forEach(t => {
-				$("#node-types").append("<div><span class=\"circle-color\" style=\"background:" +
-				colors[i] + "\"></span> " + t.name + "</div>");
+				$("#node-types").append("<div><input type='checkbox' id='vertex-type-"+i+"'>\
+					<label for='vertex-type-"+i+"'><span class=\"circle-color\" style=\"background:" +
+				colors[i] + "\"></span> " + t.name + "</label></div>");
 				i++;
 			});
 
+			i = 0;
 			//TODO: FIx this
 			$("#edge-types > *").remove();
 			result.edgeArchetypes.forEach(t => {
-				$("#edge-types").append("<div><span class=\"circle-color\" style=\"background:" +
-				colors[i] + "\"></span> " + t.name + "</div>");
+				$("#edge-types").append("<div><input type='checkbox' id='edge-type-"+i+"'>\
+					<label for='edge-type-"+i+"'><span class=\"circle-color\" style=\"background:" +
+				colors[i] + "\"></span> " + t.name + "</label></div>");
 				i++;
 			});
 
