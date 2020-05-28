@@ -183,7 +183,8 @@ import * as $ from 'jquery'
 			vertices[data.edges[i].to].degree++;
 		}
 
-		redraw();
+		if (!running)
+			redraw()
 	}
 
 
@@ -355,13 +356,16 @@ import * as $ from 'jquery'
 	$("#node_labels").click((e) => { node_labels = e.target.checked})
 
 
-	var stop = false;
+	var running = false;
 
 	async function redraw(){
 
 		if (vertices == null || edges == null){
+			running = false;
 			return
 		}
+
+		running = true;
 
 		ctx.save();
 		ctx.setTransform(1,0,0,1,0,0);
@@ -499,7 +503,7 @@ import * as $ from 'jquery'
 			vertex.draw();
 		});
 
-		await new Promise(r => setTimeout(r, 50));
+		await new Promise(r => setTimeout(r, 5));
 		redraw()
 	}
 })();
