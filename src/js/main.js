@@ -93,6 +93,8 @@ import * as $ from 'jquery'
 			console.log('File is not an json.', file.type, file);
 			return;
 		}
+		super_node = null
+		super_node_id = -1
 
 		const reader = new FileReader();
 
@@ -177,7 +179,7 @@ import * as $ from 'jquery'
 				new Node(
 					data.vertices[i].id,
 					1,
-					data.vertices[i].title || "Node "+i,
+					data.vertices[i].title || data.vertices[i].name || "Node "+i,
 					data.vertices[i].archetype,
 					offset_w*Math.random(),
 					offset_h*Math.random(),
@@ -226,7 +228,7 @@ import * as $ from 'jquery'
 						i,
 						vertices[data.edges[i].from],
 						vertices[data.edges[i].to],
-						data.edges[i].text|| "Edge "+i,
+						data.edges[i].text || data.edgeArchetypes[data.edges[i].subedgeInfo[0].archetype].text || "Edge "+i,
 						atype
 					)
 
