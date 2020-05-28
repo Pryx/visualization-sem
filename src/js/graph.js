@@ -15,7 +15,7 @@ export function Edge(id, from, to, text, type){
 	this.to = to;
 	this.text = text;
 	this.type = type;
-	this.k = 1
+	this.k = .5
 }
 
 Node.prototype.applyForce = function(force){

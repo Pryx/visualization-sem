@@ -112,7 +112,7 @@ import * as $ from 'jquery'
 	let eta = 0.9; // damping
 	let delta_t = 0.1; //time
 	let max_v = 50; //time
-	let repulsion = 50;
+	let repulsion = 1500;
 
 
 	let offset_w = canvasW * scale / 2;
@@ -253,17 +253,26 @@ import * as $ from 'jquery'
 				if (v.id !== v2.id)
 				{
 					var d = v.p.subtract(v2.p);
-					var distance = d.magnitude() + 0.1;//Divide by zero fix
+					var distance = d.magnitude();//Divide by zero fix
 					var direction = d.normalize();
-					let degreeDiff = Math.abs(v.degree - v2.degree)
-					v.applyForce(
-						direction.multiply(repulsion * repulsion)
-							.divide(distance * distance * 0.5+degreeDiff)
-					);
-					v2.applyForce(
-						direction.multiply(repulsion * repulsion)
-							.divide(distance * distance * -0.5+degreeDiff)
-					);
+					let degreeMax = Math.max(v.degree, v2.degree)
+					if (distance < Math.log2(degreeMax)*300){
+						v.applyForce(
+						direction.multiply(repulsion).divide(distance * distance*0.01)
+						);
+						v2.applyForce(
+							direction.multiply(repulsion ).divide(distance * distance*-0.01)
+						);
+					}else{
+						v.applyForce(
+							direction.multiply(repulsion)
+								.divide(distance * distance * 0.5)
+						);
+						v2.applyForce(
+							direction.multiply(repulsion )
+								.divide(distance * distance * -0.5)
+						);
+					}
 				}
 			});
 		});
@@ -271,8 +280,8 @@ import * as $ from 'jquery'
 		//Edge pullback
 		edges.forEach(spring => {
 			var d = spring.to.p.subtract(spring.from.p); // the direction of the spring
-			var displacement = repulsion*5*Math.max(spring.to.degree, spring.from.degree);
-			displacement = displacement  + repulsion -  d.magnitude(); 
+			var displacement = repulsion; //+ 100*Math.max(spring.to.degree, spring.from.degree);
+			displacement -=  d.magnitude(); 
 			var direction = d.normalize();
 
 			// apply force to each end point
@@ -280,12 +289,14 @@ import * as $ from 'jquery'
 			spring.to.applyForce(direction.multiply(spring.k * displacement * 0.5));
 		});
 
+
+		//Go to center
 		vertices.forEach(v => {
 			var direction = middle.subtract(v.p);
 
 			//console.log(v.p)
 
-			v.applyForce(direction.multiply(repulsion / 50.0));
+			v.applyForce(direction.multiply(Math.sqrt(repulsion) / 50.0));
 		});
 
 		vertices.forEach(v =>  {
