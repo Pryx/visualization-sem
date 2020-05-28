@@ -444,15 +444,30 @@ import * as $ from 'jquery'
 
 	$("body").on("change", ".refilter", function(){
 
+		for(let i=0; i < data.edges.length; i++){
+
+			if(vertices[data.edges[i].from].expandable == false) 
+				if($("#vertex-type-" + vertices[data.edges[i].to].type).is(":checked"))
+					vertices[data.edges[i].to].show = true
+
+			if(vertices[data.edges[i].to].expandable == false) 
+				if($("#vertex-type-" + vertices[data.edges[i].from].type).is(":checked"))
+					vertices[data.edges[i].from].show = true
+		}
+
+
+
 		vertices.forEach(v => {
 			if(v.id == super_node_id) return;
 			if(!$("#vertex-type-" + v.type).is(":checked")){
 				v.show = false;
 			} else {
 				v.show &= true;
+
 			}
 
 		});
+
 
 
 
@@ -482,8 +497,10 @@ import * as $ from 'jquery'
 
 				
 			} else {
-				vertices[data.edges[i].to].expandable = true;
-				vertices[data.edges[i].from].expandable = true;
+				if(data.edges[i].to != super_node_id)
+					vertices[data.edges[i].to].expandable = true;
+				if(data.edges[i].from != super_node_id)
+					vertices[data.edges[i].from].expandable = true;
 				delete edges[data.edges[i].id]
 
 			}
