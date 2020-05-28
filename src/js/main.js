@@ -137,7 +137,7 @@ import * as $ from 'jquery'
 
 	let eta = 0.9; // damping
 	let delta_t = 0.1; //time
-	let max_v = 50; //time
+	let max_v = 50; //speed
 	let repulsion = 1500;
 
 
@@ -503,7 +503,7 @@ import * as $ from 'jquery'
 			vertex.draw();
 		});
 
-		await new Promise(r => setTimeout(r, 5));
+		await new Promise(r => setTimeout(r, 10));
 		redraw()
 	}
 })();

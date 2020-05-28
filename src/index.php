@@ -82,55 +82,56 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
     <div id="viz_container">
       <canvas id="canvas" style="height: 100vh; width: calc(100vw - 350px)"></canvas>
       <section style="width:350px; max-height:100%; position:absolute; top:0;right:0;">
-        <div class="card" id="sidebar" style="height:100vh;">
-          <div class="card-header">
-            <i class="fas fa-file color-primary"></i> Select file
-          </div>
-          <div class="card-body">
-            <div class="form-group row">
-              <div class="custom-file">
-                <input type="file" id="file-selector" accept=".json" class="custom-file-input">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+        <div class="card" id="sidebar" style="height:100vh; overflow: auto">
+          <div class="overflow-container" style="display: flex; flex-direction: column;">
+            <div class="card-header">
+              <i class="fas fa-file color-primary"></i> Select file
+            </div>
+            <div class="card-body">
+              <div class="form-group row">
+                <div class="custom-file">
+                  <input type="file" id="file-selector" accept=".json" class="custom-file-input">
+                  <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
               </div>
+              
+              <button type="button" id="read" class="btn btn-primary btn-block">Load file</button>
             </div>
-            
-            <button type="button" id="read" class="btn btn-primary btn-block">Load file</button>
-          </div>
-          <div class="card-body">
-            <h5>Info about file</h5>
-            Nodes: <span id="nodes-count" class="text-right">X</span>
-            <br>
-            Edges: <span id="edges-count" class="text-right">X</span>
-          </div>
+            <div class="card-body">
+              <h5>Info about file</h5>
+              Nodes: <span id="nodes-count" class="text-right">X</span>
+              <br>
+              Edges: <span id="edges-count" class="text-right">X</span>
+            </div>
 
-          <div class="card-header">
-            <i class="fas fa-filter color-primary"></i> Choose Filter
-          </div>
+            <div class="card-header">
+              <i class="fas fa-filter color-primary"></i> Choose Filter
+            </div>
 
 
-          <div class="card-body">
-            <div class="input-group">
-            <input type="text" class="form-control" placeholder="Node">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="button-search">Search</button>
+            <div class="card-body">
+              <div class="input-group">
+              <input type="text" class="form-control" placeholder="Node">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="button-search">Search</button>
+                </div>
               </div>
-            </div>
 
 
+              </div>
+            <div class="card-header">
+              <i class="fas fa-type color-primary"></i> Node types
             </div>
-          <div class="card-header">
-            <i class="fas fa-type color-primary"></i> Node types
+            <div class="card-body">
+              <div id="node-types">
+              </div>
+
+
+              <input type="checkbox">Draw everything
+              <input type="checkbox" id="node_labels">Show node labels
+              <input type="checkbox" id="edge_labels">Show edge labels
+            </div>
           </div>
-          <div class="card-body">
-            <div id="node-types">
-            </div>
-
-
-            <input type="checkbox">Draw everything
-            <input type="checkbox" id="node_labels">Show node labels
-            <input type="checkbox" id="edge_labels">Show edge labels
-          </div>
-
         </div>
       </section>
 
