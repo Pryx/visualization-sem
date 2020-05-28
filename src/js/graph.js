@@ -17,7 +17,10 @@ export function Edge(id, from, to, text, type){
 	this.to = to;
 	this.text = text;
 	this.type = type;
-	this.k = .5
+	this.k = (
+		to.degree==from.degree?0.0001 : (Math.pow(to.degree/from.degree,2)>0? 
+		(Math.pow(to.degree/from.degree,2)>.5?.5:Math.pow(to.degree/from.degree,2))
+		: 0.0001))
 }
 
 Node.prototype.applyForce = function(force){

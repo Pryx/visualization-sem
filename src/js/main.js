@@ -181,8 +181,8 @@ import * as $ from 'jquery'
 					1,
 					data.vertices[i].title || data.vertices[i].name || "Node "+i,
 					data.vertices[i].archetype,
-					offset_w*Math.random(),
-					offset_h*Math.random(),
+					offset_w*(0.5+Math.random()),
+					offset_h*(0.5+Math.random()),
 					description
 				)
 			
@@ -535,11 +535,12 @@ import * as $ from 'jquery'
 					var direction = d.normalize();
 					let degreeMax = Math.max(v.degree, v2.degree)
 					if (distance < Math.log2(degreeMax)*300){
+						//console.log("id1: "+v.id+"id2: "+v2.id+" d"+distance )
 						v.applyForce(
-						direction.multiply(repulsion).divide(distance * distance*0.01)
+						direction.multiply(repulsion+Math.log2(degreeMax)*300).divide(distance * distance*0.001)
 						);
 						v2.applyForce(
-							direction.multiply(repulsion ).divide(distance * distance*-0.01)
+							direction.multiply(repulsion+Math.log2(degreeMax)*300).divide(distance * distance*-0.001)
 						);
 					}else{
 						v.applyForce(
@@ -575,7 +576,7 @@ import * as $ from 'jquery'
 
 			//console.log(v.p)
 
-			v.applyForce(direction.multiply(Math.sqrt(repulsion) / 50.0));
+			v.applyForce(direction.multiply(v.degree / 100.0));
 		});
 
 		vertices.forEach(v =>  {
