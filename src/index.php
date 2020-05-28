@@ -112,12 +112,24 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
 
 
             <div class="card-body">
+
+              <div class="form-group">
+                <label for="mindigree">Minimal node degree:</label> <span id="node_degree_sel"></span>
+                <input type="range" class="form-control-range refilter" id="mindegree">
+              </div>
+
+
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Node">
+                <input type="text" class="form-control" placeholder="Node" id="text-search">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" type="button" id="button-search">Search</button>
                 </div>
               </div>
+              <div id="search-results">
+                
+              </div>
+
+
             </div>
 
             <div class="card-header">

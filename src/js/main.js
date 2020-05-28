@@ -164,6 +164,10 @@ import * as $ from 'jquery'
 
 
 	function compute_coordinates(data){
+
+		var min_degree = $("#mindegree").val()
+		$("#node_degree_sel").text(min_degree)
+
 		vertices = []
 		for(let i=0; i < data.vertices.length; i++){
 			let description = "<strong>Node ID:</strong> "+i+"<br>";
@@ -198,6 +202,16 @@ import * as $ from 'jquery'
 
 		});
 		*/
+
+		vertices.forEach(v => {
+			if(v.degree>=min_degree){
+				v.show &= true;
+			} else {
+				v.show = false;
+			}
+
+		});
+
 
 		if(super_node_id > 0){
 			console.log("Showing node with id " + super_node_id)
@@ -420,6 +434,32 @@ import * as $ from 'jquery'
 	$("body").on("change", ".refilter", function(){
 
 		compute_coordinates(data);
+
+	});
+
+
+	$("body").on("click","#button-search",  function(){
+		let search = $("#text-search").val();
+		let instring = "";
+		vertices.forEach(v=>{
+			//console.log("Searching in " + v.name)
+			if(v.name.includes(search)){
+				console.log("Found")
+				instring += "<div><i title=\"Details\" class=\"fas fa-eye change-supernode text-primary\" data-id=\""+v.id+
+				"\"></i> "+v.name+" - degree: "+v.degree+"</div>";
+			}
+
+		})
+		$("#search-results").html(instring)
+
+	});
+
+
+	$("body").on("click",".change-supernode",  function(){
+
+		super_node_id = $(this).data("id")
+		super_node = vertices[super_node_id]
+		compute_coordinates(data)
 
 	});
 
