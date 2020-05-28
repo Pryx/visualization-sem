@@ -5,6 +5,26 @@ import * as $ from 'jquery'
 (function(){
 
 	var colors = [
+		"#007bff",
+		"#6610f2",
+		"#e83e8c",
+		"#dc3545",
+		"#fd7e14",
+		"#ffc107",
+		"#28a745",
+		"#20c997",
+		"#17a2b8",
+		"#fff",
+		"#6c757d",
+		"#343a40",
+		"#007bff",
+		"#6c757d",
+		"#28a745",
+		"#17a2b8",
+		"#ffc107",
+		"#dc3545",
+		"#f8f9fa",
+		"#343a40",
 		"#00FFFF",
 		"#f0ffff",
 		"#f5f5dc",
@@ -146,13 +166,18 @@ import * as $ from 'jquery'
 		for(let i=0; i < data.edges.length; i++){
 			let info = ""
 			if(data.edges[i].attributes) info = data.edges[i].attributes[32]
+
+			let atype = ""
+			if(data.edges[i].archetype) atype = data.edges[i].archetype
+			if(data.edges[i].subedgeInfo) atype = data.edges[i].subedgeInfo[0].archetype
+
 			edges.push(
 				new Edge(
 					i,
 					vertices[data.edges[i].from],
 					vertices[data.edges[i].to],
 					data.edges[i].text,
-					info
+					atype
 				)
 			)
 			vertices[data.edges[i].from].degree++;
@@ -340,10 +365,15 @@ import * as $ from 'jquery'
 				pos_t.x+(Math.log2(e.to.degree+1)*25/2), 
 				pos_t.y+(Math.log2(e.to.degree+1)*25/2), 
 				{
-					fill: 'red', 
-					stroke: {color: 'red', width:5}
+
+					fill: colors[colors.length - e.type - 1], 
+					stroke: {color: colors[colors.length - e.type - 1], width:3}
 				},
+
 				edge_labels?"Edge label":undefined
+
+
+
 			);
 
 			edge.draw();
