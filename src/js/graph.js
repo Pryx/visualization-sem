@@ -7,6 +7,8 @@ export function Node(id, degree, name, type,x,y, description){
 	this.v = new Point(0, 0); // velocity
 	this.a = new Point(0, 0); // force
 	this.description = description || "No description"
+	this.static = stat || false;
+	this.show = true;
 }
 
 export function Edge(id, from, to, text, type){

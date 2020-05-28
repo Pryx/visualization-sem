@@ -105,14 +105,14 @@ import * as $ from 'jquery'
 		reader.addEventListener('load', (e) => {
 			result = JSON.parse(e.target.result);
 			console.log(result);
-
+			data = result;
 			$("#nodes-count").text(result.vertices.length);
 			$("#edges-count").text(result.edges.length);
 
 			let i = 0;
 			$("#node-types > *").remove();
 			result.vertexArchetypes.forEach(t => {
-				$("#node-types").append("<div><input type='checkbox' id='vertex-type-"+i+"' checked>\
+				$("#node-types").append("<div><input class=\"refilter\" type='checkbox' id='vertex-type-"+i+"' checked>\
 					<label for='vertex-type-"+i+"'><span class=\"circle-color\" style=\"background:" +
 				colors[i] + "\"></span> " + t.name + "</label></div>");
 				i++;
@@ -122,7 +122,7 @@ import * as $ from 'jquery'
 			//TODO: FIx this
 			$("#edge-types > *").remove();
 			result.edgeArchetypes.forEach(t => {
-				$("#edge-types").append("<div><input type='checkbox' id='edge-type-"+i+"' checked>\
+				$("#edge-types").append("<div><input class=\"refilter\" type='checkbox' id='edge-type-"+i+"' checked>\
 					<label for='edge-type-"+i+"'><span class=\"circle-color\" style=\"background:" +
 				colors[colors.length - i - 1] + "\"></span> " + t.name + "</label></div>");
 				i++;
@@ -183,6 +183,19 @@ import * as $ from 'jquery'
 			
 		}
 
+
+		vertices.forEach(v => {
+			if(!$("#vertex-type-" + v.type).is(":checked")){
+				v.show = false;
+			} else {
+				v.show = true;
+			}
+
+		});
+
+
+
+
 		edges = []
 		for(let i=0; i < data.edges.length; i++){
 			let info = ""
@@ -192,18 +205,28 @@ import * as $ from 'jquery'
 			if(data.edges[i].archetype) atype = data.edges[i].archetype
 			if(data.edges[i].subedgeInfo) atype = data.edges[i].subedgeInfo[0].archetype
 
-			edges.push(
-				new Edge(
-					i,
-					vertices[data.edges[i].from],
-					vertices[data.edges[i].to],
-					data.edges[i].text|| "Edge "+i,
-					atype
+
+			if(vertices[data.edges[i].from].show && vertices[data.edges[i].to].show){
+				edges.push(
+					new Edge(
+						i,
+						vertices[data.edges[i].from],
+						vertices[data.edges[i].to],
+						data.edges[i].text|| "Edge "+i,
+						atype
+					)
+
 				)
-			)
+			}
 			vertices[data.edges[i].from].degree++;
 			vertices[data.edges[i].to].degree++;
 		}
+
+
+
+
+
+
 
 		if (!running)
 			redraw()
@@ -317,6 +340,12 @@ import * as $ from 'jquery'
 	}
 
 
+	$("body").on("change", ".refilter", function(){
+
+		compute_coordinates(data);
+
+	});
+
 
 	$("body").on("click","#zoom-up",  function(){
 		change_zoom(true);
@@ -409,7 +438,7 @@ import * as $ from 'jquery'
 		//Vertex repulsion
 		vertices.forEach(v => {
 			vertices.forEach(v2 => {
-				if (v.id !== v2.id)
+				if (v.id !== v2.id && (v.show && v2.show))
 				{
 					var d = v.p.subtract(v2.p);
 					var distance = d.magnitude();//Divide by zero fix
@@ -451,6 +480,7 @@ import * as $ from 'jquery'
 
 		//Go to center
 		vertices.forEach(v => {
+			if(!v.show) return;
 			var direction = middle.subtract(v.p);
 
 			//console.log(v.p)
@@ -459,6 +489,7 @@ import * as $ from 'jquery'
 		});
 
 		vertices.forEach(v =>  {
+			if(!v.show) return;
 			v.v = v.v.add(v.a.multiply(delta_t)).multiply(eta);
 			if (v.v.magnitude() > max_v) {
 				//console.log("MAX VELOCITY!")
@@ -512,6 +543,7 @@ import * as $ from 'jquery'
 		});
 
 		vertices.forEach(v => {
+			if(!v.show) return;
 			let pos = v.p;
 			let vertex = new Circle(
 				ctx,
