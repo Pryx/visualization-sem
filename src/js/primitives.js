@@ -1,8 +1,9 @@
-export function Circle(context, x,y,d,style){
+export function Circle(context, x,y,d,style, text){
   this.x = x
   this.y = y
   this.d = d
   this.style = style || {}
+  this.text = text || undefined
   this.context = context;
 }
 
@@ -32,6 +33,7 @@ Circle.prototype = {
     context.bezierCurveTo(xc - radius, ye, this.x, yc + radius, this.x, yc);
     context.closePath();
 
+
     if (style.fill!==undefined){
       context.fillStyle = style.fill
       context.fill()
@@ -42,16 +44,27 @@ Circle.prototype = {
       context.lineWidth = style.stroke.width
       context.stroke()
     }
+
+    if (this.text!==undefined){
+      this.context.font = "14px Arial";
+      var width = context.measureText(this.text).width; /// width in pixels
+      context.fillStyle = '#FFF';
+      context.fillRect(xc-2-width/2, yc-9, width+4, 18);
+      context.fillStyle = '#000';
+      this.context.fillText(this.text, xc-width/2, yc+7);     
+    }
+
     context.restore()
   }
 
 }
 
 
-export function Path (context, x1, y1, x2, y2, style){
+export function Path (context, x1, y1, x2, y2, style, text){
   this.points = [ {x:x1,y:y1}, {x:x2,y:y2} ]
   this.style = style || {}
   this.context = context;
+  this.text = text || ""
 }
 
 Path.prototype = {
@@ -78,6 +91,18 @@ Path.prototype = {
     }else{
       console.error("No stroke style for path")
     }
+
+    if (this.text!==undefined){
+      let xc = (this.points[0].x+.5+this.points[1].x+.5)/2;
+      let yc = (this.points[0].y+.5 +this.points[1].y+.5)/2;
+      this.context.font = "14px Arial";
+      var width = context.measureText(this.text).width; /// width in pixels
+      context.fillStyle = '#FFF';
+      context.fillRect(xc-2-width/2, yc-9, width+4, 18);
+      context.fillStyle = '#000';
+      this.context.fillText(this.text, xc-width/2, yc+7);     
+    }
+
 		context.restore()
   }
 }

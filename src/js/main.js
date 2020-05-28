@@ -331,14 +331,15 @@ import * as $ from 'jquery'
 			let pos_t = e.to.p;
 			let edge = new Path(
 				ctx, 
-				pos_f.x+(Math.log2(e.from.degree)*25/2), 
-				pos_f.y+(Math.log2(e.from.degree)*25/2), 
-				pos_t.x+(Math.log2(e.to.degree)*25/2), 
-				pos_t.y+(Math.log2(e.to.degree)*25/2), 
+				pos_f.x+(Math.log2(e.from.degree+1)*25/2), 
+				pos_f.y+(Math.log2(e.from.degree+1)*25/2), 
+				pos_t.x+(Math.log2(e.to.degree+1)*25/2), 
+				pos_t.y+(Math.log2(e.to.degree+1)*25/2), 
 				{
 					fill: 'red', 
 					stroke: {color: 'red', width:5}
-				}
+				},
+				"HIIIII"
 			);
 
 			edge.draw();
@@ -350,9 +351,13 @@ import * as $ from 'jquery'
 				ctx,
 				pos.x,
 				pos.y,
-				Math.log2(v.degree)*25,
-				{fill: colors[v.type], stroke: {color: colors[v.type], width:5}}
-				)
+				Math.log2(v.degree+1)*25,
+				{
+					fill: colors[v.type], 
+					stroke: {color: colors[v.type], width:5}
+				},
+				"HELLO"
+			);
 			vertex.draw();
 		});
 

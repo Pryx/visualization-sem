@@ -21,23 +21,8 @@ export function Edge(id, from, to, text, type){
 Node.prototype.applyForce = function(force){
 		this.a = this.a.add(force.divide(this.m));
 	}
-/*
-export function Spring(point1, point2, length, k)
-{
-	this.point1 = point1;
-	this.point2 = point2;
-	this.length = length; // spring length at rest
-	this.k = k;           // stiffness
-}
 
-Spring.prototype.distanceToParticle = function(point)
-{
-	// see http://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment/865080#865080
-	var n = that.point2.p.subtract(that.point1.p).normalize().normal();
-	var ac = point.p.subtract(that.point1.p);
-	return Math.abs(ac.x * n.x + ac.y * n.y);
-};
-*/
+
 export function Point(x, y){
 	this.x = x;
 	this.y = y;  
