@@ -445,6 +445,7 @@ import * as $ from 'jquery'
 	$("body").on("change", ".refilter", function(){
 
 		vertices.forEach(v => {
+			if(v.id == super_node_id) return;
 			if(!$("#vertex-type-" + v.type).is(":checked")){
 				v.show = false;
 			} else {
@@ -466,10 +467,9 @@ import * as $ from 'jquery'
 
 
 			if(
-				(vertices[data.edges[i].from].show && vertices[data.edges[i].to].show)
-				||
-				(super_node!= null && (data.edges[i].from == super_node.id || data.edges[i].to == super_node.id))
-				)
+				vertices[data.edges[i].from].show && vertices[data.edges[i].to].show)
+				
+				
 			{
 				edges[data.edges[i].id]=
 					new Edge(
@@ -488,10 +488,6 @@ import * as $ from 'jquery'
 
 			}
 
-			if(super_node != null){
-				if(data.edges[i].from == super_node.id) vertices[data.edges[i].to].show = true;
-				if(data.edges[i].to == super_node.id) vertices[data.edges[i].from].show = true; //backwards edges
-			}
 		}
 
 
