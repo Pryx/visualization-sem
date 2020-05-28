@@ -192,16 +192,7 @@ import * as $ from 'jquery'
 			
 		}
 
-		/*
-		vertices.forEach(v => {
-			if(!$("#vertex-type-" + v.type).is(":checked")){
-				v.show = false;
-			} else {
-				v.show = true;
-			}
 
-		});
-		*/
 
 		vertices.forEach(v => {
 			if(v.degree>=min_degree){
@@ -248,6 +239,9 @@ import * as $ from 'jquery'
 					)
 
 				
+			} else {
+				delete edges[data.edges[i].id]
+
 			}
 			vertices[data.edges[i].from].degree++;
 			vertices[data.edges[i].to].degree++;
@@ -434,7 +428,56 @@ import * as $ from 'jquery'
 
 	$("body").on("change", ".refilter", function(){
 
-		compute_coordinates(data);
+		vertices.forEach(v => {
+			if(!$("#vertex-type-" + v.type).is(":checked")){
+				v.show = false;
+			} else {
+				v.show &= true;
+			}
+
+		});
+
+
+		for(let i=0; i < data.edges.length; i++){
+			let info = ""
+			if(data.edges[i].attributes) info = data.edges[i].attributes[32]
+
+			let atype = ""
+			if(data.edges[i].archetype) atype = data.edges[i].archetype
+			if(data.edges[i].subedgeInfo) atype = data.edges[i].subedgeInfo[0].archetype
+
+
+			if(
+				(vertices[data.edges[i].from].show && vertices[data.edges[i].to].show)
+				||
+				(super_node!= null && (data.edges[i].from == super_node.id || data.edges[i].to == super_node.id))
+				)
+			{
+				edges[data.edges[i].id]=
+					new Edge(
+						data.edges[i].id,
+						vertices[data.edges[i].from],
+						vertices[data.edges[i].to],
+						data.edges[i].text || "Edge "+data.edges[i].id,
+						atype
+					)
+
+				
+			} else {
+				vertices[data.edges[i].to].expandable = true;
+				vertices[data.edges[i].from].expandable = true;
+				delete edges[data.edges[i].id]
+
+			}
+
+			if(super_node != null){
+				if(data.edges[i].from == super_node.id) vertices[data.edges[i].to].show = true;
+				if(data.edges[i].to == super_node.id) vertices[data.edges[i].from].show = true; //backwards edges
+			}
+		}
+
+
+
 
 	});
 
