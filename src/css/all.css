@@ -65,6 +65,7 @@
   list-style-type: none;
   margin-left: 2.5em;
   padding-left: 0; }
+  
   .fa-ul > li {
     position: relative; }
 
@@ -112,6 +113,7 @@
   0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg); }
+            
   100% {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
@@ -120,6 +122,7 @@
   0% {
     -webkit-transform: rotate(0deg);
             transform: rotate(0deg); }
+            
   100% {
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg); } }
