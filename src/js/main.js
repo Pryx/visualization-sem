@@ -76,6 +76,7 @@ import * as $ from 'jquery'
 	var data
 	var vertices = null
 	var edges = null
+	var super_node = null
 
 
 	btn.addEventListener('click', (event) => {
@@ -128,7 +129,8 @@ import * as $ from 'jquery'
 				i++;
 			});
 
-
+			compute_coordinates(result);
+			find_supernode(result);
 			compute_coordinates(result);
 		});
 		reader.readAsText(file);
@@ -183,7 +185,7 @@ import * as $ from 'jquery'
 			
 		}
 
-
+		/*
 		vertices.forEach(v => {
 			if(!$("#vertex-type-" + v.type).is(":checked")){
 				v.show = false;
@@ -192,7 +194,11 @@ import * as $ from 'jquery'
 			}
 
 		});
+		*/
 
+		if(super_node != null){
+			super_node.show = true
+		}
 
 
 
@@ -206,7 +212,12 @@ import * as $ from 'jquery'
 			if(data.edges[i].subedgeInfo) atype = data.edges[i].subedgeInfo[0].archetype
 
 
-			if(vertices[data.edges[i].from].show && vertices[data.edges[i].to].show){
+			if(
+				(vertices[data.edges[i].from].show && vertices[data.edges[i].to].show)
+				||
+				(super_node!= null && (data.edges[i].from == super_node.id || data.edges[i].to == super_node.id))
+				)
+			{
 				edges.push(
 					new Edge(
 						i,
@@ -220,7 +231,15 @@ import * as $ from 'jquery'
 			}
 			vertices[data.edges[i].from].degree++;
 			vertices[data.edges[i].to].degree++;
+
+			if(super_node != null){
+				if(data.edges[i].from == super_node.id) vertices[data.edges[i].to].show = true;
+				if(data.edges[i].to == super_node.id) vertices[data.edges[i].from].show = true; //backwards edges
+			}
 		}
+
+
+
 
 
 
@@ -230,6 +249,20 @@ import * as $ from 'jquery'
 
 		if (!running)
 			redraw()
+	}
+
+	function find_supernode(data){
+		super_node = vertices[Object.keys(data.vertices)[0]]
+		vertices.forEach(v => {
+			if(v.degree > super_node.degree){
+				super_node = v;
+			} 
+
+
+			console.log("Supernode id:" + super_node.id);
+
+		});
+
 	}
 
 
@@ -431,6 +464,7 @@ import * as $ from 'jquery'
 			running = false;
 			return
 		}
+		
 
 		running = true;
 
