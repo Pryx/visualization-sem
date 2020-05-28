@@ -175,7 +175,7 @@ import * as $ from 'jquery'
 			}
 			vertices[data.vertices[i].id] =
 				new Node(
-					i,
+					data.vertices[i].id,
 					1,
 					data.vertices[i].title || "Node "+i,
 					data.vertices[i].archetype,
@@ -197,7 +197,9 @@ import * as $ from 'jquery'
 		});
 		*/
 
-		if(super_node != null){
+		if(super_node_id > 0){
+			console.log("Showing node with id " + super_node_id)
+			console.log(vertices)
 			vertices[super_node_id].show = true
 		}
 
@@ -253,7 +255,7 @@ import * as $ from 'jquery'
 	}
 
 	function find_supernode(data){
-		super_node = vertices[Object.keys(data.vertices)[0]]
+		super_node = vertices[Object.keys(vertices)[0]]
 		vertices.forEach(v => {
 			if(v.degree > super_node.degree){
 				super_node = v;
