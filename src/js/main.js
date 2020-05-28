@@ -217,6 +217,7 @@ import * as $ from 'jquery'
 			console.log("Showing node with id " + super_node_id)
 			console.log(vertices)
 			vertices[super_node_id].show = true
+			vertices[super_node_id].expandable = false
 		}
 
 
@@ -503,6 +504,7 @@ import * as $ from 'jquery'
 						down = true;
 						defX = e.pageX
 						defY = e.pageY
+						v.expandable = false
 						expand_node(v)
 					} else {
 
@@ -675,6 +677,9 @@ import * as $ from 'jquery'
 
 		vertices.forEach(v => {
 			if(!v.show) return;
+			let exp_i = 0;
+			if(v.expandable) exp_i = 2
+
 			let pos = v.p;
 			let vertex = new Circle(
 				ctx,
@@ -686,7 +691,7 @@ import * as $ from 'jquery'
 				{
 					fill: colors[v.type], 
 					stroke: {
-						color: colors[v.type], 
+						color: colors[v.type + exp_i], 
 						width:5
 					},
 					font: {
