@@ -240,7 +240,11 @@ import * as $ from 'jquery'
 
 
 
+	let edge_labels = false;
+	let node_labels = false;
 
+	$("#edge_labels").click((e) => { edge_labels = e.target.checked})
+	$("#node_labels").click((e) => { node_labels = e.target.checked})
 
 
 	var stop = false;
@@ -339,7 +343,7 @@ import * as $ from 'jquery'
 					fill: 'red', 
 					stroke: {color: 'red', width:5}
 				},
-				"HIIIII"
+				edge_labels?"Edge label":undefined
 			);
 
 			edge.draw();
@@ -356,7 +360,7 @@ import * as $ from 'jquery'
 					fill: colors[v.type], 
 					stroke: {color: colors[v.type], width:5}
 				},
-				"HELLO"
+				node_labels?"Node label":undefined
 			);
 			vertex.draw();
 		});

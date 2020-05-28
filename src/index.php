@@ -115,6 +115,8 @@ box-shadow: -2px 0px 9px -2px rgba(0,0,0,0.75);
 
 
             <input type="checkbox">Draw everything
+            <input type="checkbox" id="node_labels">Show node labels
+            <input type="checkbox" id="edge_labels">Show edge labels
           </div>
 
         </div>

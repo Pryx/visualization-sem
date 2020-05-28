@@ -64,7 +64,7 @@ export function Path (context, x1, y1, x2, y2, style, text){
   this.points = [ {x:x1,y:y1}, {x:x2,y:y2} ]
   this.style = style || {}
   this.context = context;
-  this.text = text || ""
+  this.text = text || undefined
 }
 
 Path.prototype = {
