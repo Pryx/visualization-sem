@@ -124,7 +124,7 @@ import * as $ from 'jquery'
 			result.edgeArchetypes.forEach(t => {
 				$("#edge-types").append("<div><input type='checkbox' id='edge-type-"+i+"' checked>\
 					<label for='edge-type-"+i+"'><span class=\"circle-color\" style=\"background:" +
-				colors[i] + "\"></span> " + t.name + "</label></div>");
+				colors[colors.length - i - 1] + "\"></span> " + t.name + "</label></div>");
 				i++;
 			});
 
