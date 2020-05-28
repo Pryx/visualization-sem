@@ -161,7 +161,7 @@ import * as $ from 'jquery'
 	function compute_coordinates(data){
 		vertices = []
 		for(let i=0; i < data.vertices.length; i++){
-			let description = "";
+			let description = "<strong>Node ID:</strong> "+i+"<br>";
 			data.vertices[i].attributes.forEach(atr => {
 				description += "<strong>"+atr[0]+":</strong> "+atr[1]+"<br>"
 			});
