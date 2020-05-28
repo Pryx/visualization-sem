@@ -247,8 +247,17 @@ import * as $ from 'jquery'
 			vertices[data.edges[i].to].degree++;
 
 			if(super_node != null){
-				if(data.edges[i].from == super_node.id) vertices[data.edges[i].to].show = true;
-				if(data.edges[i].to == super_node.id) vertices[data.edges[i].from].show = true; //backwards edges
+				if(data.edges[i].from == super_node.id) 
+					if(vertices[data.edges[i].to].degree>=min_degree)
+						vertices[data.edges[i].to].show = true;
+					else
+						delete edges[data.edges[i].id]
+
+				if(data.edges[i].to == super_node.id)
+					if(vertices[data.edges[i].from].degree>=min_degree)
+						vertices[data.edges[i].from].show = true; //backwards edges
+					else
+						delete edges[data.edges[i].id]
 			}
 		}
 
@@ -427,7 +436,7 @@ import * as $ from 'jquery'
 
 
 	$("body").on("change", ".refilter-degree", function(){
-
+		console.log("refilter-degree")
 		compute_coordinates(data)
 
 	});
