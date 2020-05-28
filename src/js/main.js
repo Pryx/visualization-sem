@@ -97,6 +97,28 @@ import * as $ from 'jquery'
 		
 	}
 
+	var canvas = document.getElementById('canvas'); 
+	var ctx = canvas.getContext('2d'); 
+	const canvasW = canvas.getBoundingClientRect().width;
+	const canvasH = canvas.getBoundingClientRect().height;
+
+	var scale = 2;
+	canvas.width = canvasW * scale;
+	canvas.height = canvasH * scale;
+	var zoom = 1;
+	var up = true;
+	var i = 1;
+
+	let eta = 0.9; // damping
+	let delta_t = 0.1; //time
+	let max_v = 50; //time
+	let repulsion = 50;
+
+
+	let offset_w = canvasW * scale / 2;
+	let offset_h = canvasH * scale / 2;
+	let middle = new Point(offset_w, offset_h);
+
 
 	function compute_coordinates(data){
 		vertices = []
@@ -107,8 +129,8 @@ import * as $ from 'jquery'
 					1,
 					data.vertices[i].title,
 					data.vertices[i].archetype,
-					canvas.width/2,
-					canvas.height/2
+					offset_w*Math.random(),
+					offset_h*Math.random()
 				)
 			
 		}
@@ -208,26 +230,6 @@ import * as $ from 'jquery'
 
 
 
-	var canvas = document.getElementById('canvas'); 
-	var ctx = canvas.getContext('2d'); 
-	const canvasW = canvas.getBoundingClientRect().width;
-	const canvasH = canvas.getBoundingClientRect().height;
-
-	var scale = 2;
-	canvas.width = canvasW * scale;
-	canvas.height = canvasH * scale;
-	var zoom = 1;
-	var up = true;
-	var i = 1;
-
-	let eta = 0.9; // damping
-	let delta_t = 0.1; //time
-	let max_v = 50; //time
-	let repulsion = 500;
-
-
-	let offset_w = canvasW * scale / 2;
-	let offset_h = canvasH * scale / 2;
 
 
 
@@ -238,10 +240,14 @@ import * as $ from 'jquery'
 		if (vertices == null || edges == null){
 			return
 		}
-		//console.log("Redrawing")
-		ctx.clearRect(0, 0, 9999999*canvas.width, 9999999*canvas.height);
 
-		//
+		ctx.save();
+		ctx.setTransform(1,0,0,1,0,0);
+		// Will always clear the right space
+		ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+		ctx.restore();
+
+		//Vertex repulsion
 		vertices.forEach(v => {
 			vertices.forEach(v2 => {
 				if (v.id !== v2.id)
@@ -249,16 +255,24 @@ import * as $ from 'jquery'
 					var d = v.p.subtract(v2.p);
 					var distance = d.magnitude() + 0.1;//Divide by zero fix
 					var direction = d.normalize();
-
-					v.applyForce(direction.multiply(repulsion).divide(distance * distance * 0.5));
-					v2.applyForce(direction.multiply(repulsion).divide(distance * distance * -0.5));
+					let degreeDiff = Math.abs(v.degree - v2.degree)
+					v.applyForce(
+						direction.multiply(repulsion * repulsion)
+							.divide(distance * distance * 0.5+degreeDiff)
+					);
+					v2.applyForce(
+						direction.multiply(repulsion * repulsion)
+							.divide(distance * distance * -0.5+degreeDiff)
+					);
 				}
 			});
 		});
 
+		//Edge pullback
 		edges.forEach(spring => {
 			var d = spring.to.p.subtract(spring.from.p); // the direction of the spring
-			var displacement = (spring.from.degree*25 + spring.to.degree*25)*10 - d.magnitude(); // 1 = spring length
+			var displacement = repulsion*5*Math.max(spring.to.degree, spring.from.degree);
+			displacement = displacement  + repulsion -  d.magnitude(); 
 			var direction = d.normalize();
 
 			// apply force to each end point
@@ -267,7 +281,10 @@ import * as $ from 'jquery'
 		});
 
 		vertices.forEach(v => {
-			var direction = v.p.multiply(-1.0);
+			var direction = middle.subtract(v.p);
+
+			//console.log(v.p)
+
 			v.applyForce(direction.multiply(repulsion / 50.0));
 		});
 
@@ -289,14 +306,14 @@ import * as $ from 'jquery'
 
 		edges.forEach(e => {
 			//console.log(dist, rep, attr);
-			let pos_f = e.from.p.add(new Point(offset_w, offset_h))
-			let pos_t = e.to.p.add(new Point(offset_w, offset_h))
+			let pos_f = e.from.p;
+			let pos_t = e.to.p;
 			let edge = new Path(
 				ctx, 
-				pos_f.x+(e.from.degree*25/2), 
-				pos_f.y+(e.from.degree*25/2), 
-				pos_t.x+(e.to.degree*25/2), 
-				pos_t.y+(e.to.degree*25/2), 
+				pos_f.x+(Math.log2(e.from.degree)*25/2), 
+				pos_f.y+(Math.log2(e.from.degree)*25/2), 
+				pos_t.x+(Math.log2(e.to.degree)*25/2), 
+				pos_t.y+(Math.log2(e.to.degree)*25/2), 
 				{
 					fill: 'red', 
 					stroke: {color: 'red', width:5}
@@ -307,13 +324,12 @@ import * as $ from 'jquery'
 		});
 
 		vertices.forEach(v => {
-			//console.log("Drawing vertex")
-			let pos = v.p.add(new Point(offset_w, offset_h))
+			let pos = v.p;
 			let vertex = new Circle(
 				ctx,
 				pos.x,
 				pos.y,
-				v.degree*25,
+				Math.log2(v.degree)*25,
 				{fill: colors[v.archetype], stroke: {color: colors[v.archetype], width:5}}
 				)
 			vertex.draw();
