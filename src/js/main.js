@@ -110,8 +110,17 @@ import * as $ from 'jquery'
 			$("#edges-count").text(result.edges.length);
 
 			let i = 0;
+			$("#node-types > *").remove();
 			result.vertexArchetypes.forEach(t => {
 				$("#node-types").append("<div><span class=\"circle-color\" style=\"background:" +
+				colors[i] + "\"></span> " + t.name + "</div>");
+				i++;
+			});
+
+			//TODO: FIx this
+			$("#edge-types > *").remove();
+			result.edgeArchetypes.forEach(t => {
+				$("#edge-types").append("<div><span class=\"circle-color\" style=\"background:" +
 				colors[i] + "\"></span> " + t.name + "</div>");
 				i++;
 			});
